@@ -1,0 +1,4 @@
+This is a sample file for the Claudio project.
+
+Created on: 2026-04-14
+Repository: https://github.com/lucazac/Claudio.git
