@@ -111,6 +111,7 @@
     .color-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
+      /* 11 colori: 3 righe da 4, ultima riga da 3 */
       gap: 10px;
       margin-bottom: 14px;
     }
@@ -289,14 +290,17 @@
     <label>2. Scegli il colore</label>
     <div class="color-grid-wrap">
       <div class="color-grid">
-        <button class="color-btn active" data-color="#0d0d0d"  data-label="Nero"     style="background:#0d0d0d"></button>
-        <button class="color-btn"        data-color="#3b1a08"  data-label="Castano"  style="background:#3b1a08"></button>
-        <button class="color-btn"        data-color="#c49a3c"  data-label="Biondo"   style="background:#c49a3c"></button>
-        <button class="color-btn"        data-color="#a83232"  data-label="Rosso"    style="background:#a83232"></button>
-        <button class="color-btn"        data-color="#1e3a8a"  data-label="Blu"      style="background:#1e3a8a"></button>
-        <button class="color-btn"        data-color="#16a34a"  data-label="Verde"    style="background:#16a34a"></button>
-        <button class="color-btn"        data-color="#be185d"  data-label="Rosa"     style="background:#be185d"></button>
-        <button class="color-btn"        data-color="#7c3aed"  data-label="Viola"    style="background:#7c3aed"></button>
+        <button class="color-btn active" data-color="#0d0d0d"  data-label="Nero"          style="background:#0d0d0d"></button>
+        <button class="color-btn"        data-color="#3b1a08"  data-label="Castano"       style="background:#3b1a08"></button>
+        <button class="color-btn"        data-color="#c49a3c"  data-label="Biondo"        style="background:#c49a3c"></button>
+        <button class="color-btn"        data-color="#e8d5a3"  data-label="Biondo nat."   style="background:#e8d5a3;border:1.5px solid #ddd"></button>
+        <button class="color-btn"        data-color="#a83232"  data-label="Rosso"         style="background:#a83232"></button>
+        <button class="color-btn"        data-color="#1e3a8a"  data-label="Blu"           style="background:#1e3a8a"></button>
+        <button class="color-btn"        data-color="#16a34a"  data-label="Verde"         style="background:#16a34a"></button>
+        <button class="color-btn"        data-color="#be185d"  data-label="Rosa"          style="background:#be185d"></button>
+        <button class="color-btn"        data-color="#7c3aed"  data-label="Viola"         style="background:#7c3aed"></button>
+        <button class="color-btn"        data-color="#8a8a8a"  data-label="Grigio"        style="background:#8a8a8a"></button>
+        <button class="color-btn"        data-color="#f0f0f0"  data-label="Bianco"        style="background:#f0f0f0;border:1.5px solid #ddd"></button>
       </div>
     </div>
     <div class="custom-color-row">
