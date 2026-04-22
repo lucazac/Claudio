@@ -110,26 +110,25 @@
     /* Color grid */
     .color-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      /* 11 colori: 3 righe da 4, ultima riga da 3 */
-      gap: 10px;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
       margin-bottom: 14px;
     }
 
     .color-btn {
       border: 3px solid transparent;
-      border-radius: 10px;
-      height: 44px;
+      border-radius: 8px;
+      height: 48px;
       cursor: pointer;
       transition: transform 0.15s, border-color 0.15s;
       position: relative;
     }
 
-    .color-btn:hover { transform: scale(1.05); }
+    .color-btn:hover { transform: scale(1.06); }
 
     .color-btn.active {
       border-color: #4f46e5;
-      transform: scale(1.05);
+      transform: scale(1.06);
     }
 
     .color-btn::after {
@@ -290,21 +289,17 @@
     <label>2. Scegli il colore</label>
     <div class="color-grid-wrap">
       <div class="color-grid">
-        <button class="color-btn active" data-color="#0d0d0d"  data-label="Nero"          style="background:#0d0d0d"></button>
-        <button class="color-btn"        data-color="#3b1a08"  data-label="Castano"       style="background:#3b1a08"></button>
-        <button class="color-btn"        data-color="#c49a3c"  data-label="Biondo"        style="background:#c49a3c"></button>
-        <button class="color-btn"        data-color="#e8d5a3"  data-label="Biondo nat."   style="background:#e8d5a3;border:1.5px solid #ddd"></button>
-        <button class="color-btn"        data-color="#a83232"  data-label="Rosso"         style="background:#a83232"></button>
-        <button class="color-btn"        data-color="#1e3a8a"  data-label="Blu"           style="background:#1e3a8a"></button>
-        <button class="color-btn"        data-color="#16a34a"  data-label="Verde"         style="background:#16a34a"></button>
-        <button class="color-btn"        data-color="#be185d"  data-label="Rosa"          style="background:#be185d"></button>
-        <button class="color-btn"        data-color="#7c3aed"  data-label="Viola"         style="background:#7c3aed"></button>
-        <button class="color-btn"        data-color="#8a8a8a"  data-label="Grigio"        style="background:#8a8a8a"></button>
-        <button class="color-btn"        data-color="#f0f0f0"  data-label="Bianco"        style="background:#f0f0f0;border:1.5px solid #ddd"></button>
+        <button class="color-btn active" data-color="#0d1d6b"  data-label="BLUE 0,11"    style="background:#0d1d6b"></button>
+        <button class="color-btn"        data-color="#1a4a22"  data-label="GREEN 0,88"   style="background:#1a4a22"></button>
+        <button class="color-btn"        data-color="#5c1a78"  data-label="VIOLET 0,22"  style="background:#5c1a78"></button>
+        <button class="color-btn"        data-color="#7a0e0e"  data-label="RED 0,66"     style="background:#7a0e0e"></button>
+        <button class="color-btn"        data-color="#b84e00"  data-label="ORANGE 0,44"  style="background:#b84e00"></button>
+        <button class="color-btn"        data-color="#c8900a"  data-label="YELLOW 0,33"  style="background:#c8900a"></button>
+        <button class="color-btn"        data-color="#c8c8c8"  data-label="CLEAR 00"     style="background:linear-gradient(135deg,#e0e0e0,#a8a8a8);border:1.5px solid #ccc"></button>
       </div>
     </div>
     <div class="custom-color-row">
-      <input type="color" id="customColor" value="#0d0d0d" />
+      <input type="color" id="customColor" value="#0d1d6b" />
       <span>Colore personalizzato</span>
     </div>
   </div>
@@ -340,7 +335,7 @@
     from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs";
 
   let segmenter = null;
-  let selectedColor = "#0d0d0d";
+  let selectedColor = "#0d1d6b";
   const status = document.getElementById("status");
   const processBtn = document.getElementById("processBtn");
 
@@ -478,16 +473,26 @@
       const pixels = imageData.data;
 
       const intensity = parseInt(document.getElementById("intensitySlider").value) / 100;
+      const isClear = selectedColor === "#c8c8c8";
       const [tr, tg, tb] = hexToRgb(selectedColor);
       const [th, ts] = rgbToHsl(tr, tg, tb);
 
       for (let i = 0; i < mask.length; i++) {
-        if (mask[i] === 0) continue; // not hair
+        if (mask[i] === 0) continue; // not hair — skip pixel
         const idx = i * 4;
         const or = pixels[idx], og = pixels[idx + 1], ob = pixels[idx + 2];
-        const [, , ol] = rgbToHsl(or, og, ob);
-        // replace H and S, keep original luminosity → natural recoloring
-        const [nr, ng, nb] = hslToRgb(th, ts, ol);
+        const [oh, os, ol] = rgbToHsl(or, og, ob);
+
+        let nr, ng, nb;
+        if (isClear) {
+          // CLEAR 00: desatura progressivamente verso grigio luminoso
+          const [dr, dg, db] = hslToRgb(oh, os * (1 - intensity), Math.min(ol + 0.1 * intensity, 1));
+          nr = dr; ng = dg; nb = db;
+        } else {
+          // Tutti gli altri: sostituisci H e S, mantieni luminosità originale
+          [nr, ng, nb] = hslToRgb(th, ts, ol);
+        }
+
         pixels[idx]     = Math.round(or + (nr - or) * intensity);
         pixels[idx + 1] = Math.round(og + (ng - og) * intensity);
         pixels[idx + 2] = Math.round(ob + (nb - ob) * intensity);
